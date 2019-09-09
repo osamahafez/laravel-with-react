@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class Categories extends Component {
 
     state = {
-        category_name: ''
+        category_name: '',
+        categories: null
     }
 
     onChangeHandler = (e) => {
@@ -13,17 +15,56 @@ class Categories extends Component {
 
     onSubmitHandler = (e) => {
         e.preventDefault();
-        console.log(this.state);
+
+        const data = {
+            category_name: this.state.category_name
+        } 
+        axios.post('api/categories/store', data)
+            .then(() => {
+               console.log('category created successfully')
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    componentDidMount() {
+        axios.get('api/categories/all')
+            .then(res => {
+                this.setState({categories: res.data})
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     render() {        
+
+        let tableContent;
+
+        if(this.state.categories) {
+            tableContent = this.state.categories.map(cat => 
+                <tr key={cat.id}>
+                    <td>{cat.name}</td>
+                    <td>{(cat.active) ? 'Active' : 'Inactive'}</td>
+                    <td>{cat.created_at}</td>
+                    <td>{cat.updated_at}</td>
+                </tr>
+            );
+        }
+
+        
+
+
         return (
             <div className='categories'>
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12">
                             <h1 className='display-4 text-center'>Add Category</h1>
-
+                            <div>
+                                
+                            </div>
                             {/* Add Categories */}
                             <form onSubmit={this.onSubmitHandler} className='mt-3'>
                                 <div className="form-group">
@@ -33,7 +74,7 @@ class Categories extends Component {
                             </form>
 
                             {/* Table of Categories */}
-                            <table class="table mt-5">
+                            <table className="table mt-5">
                                 <thead>
                                     <tr>
                                         <th scope="col">Name</th>
@@ -43,24 +84,7 @@ class Categories extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th>1</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    <tr>
-                                        <th>2</th>
-                                        <td>Jacob</td>
-                                        <td>Thornton</td>
-                                        <td>@fat</td>
-                                    </tr>
-                                    <tr>
-                                        <th >3</th>
-                                        <td>Larry</td>
-                                        <td>the Bird</td>
-                                        <td>@twitter</td>
-                                    </tr>
+                                   {tableContent}
                                 </tbody>
                             </table>
                         </div>
