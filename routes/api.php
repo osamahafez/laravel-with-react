@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::get('/categories/all', 'api\CategoryController@index'); // actual route is: api/categories/all
+Route::post('/categories/store', 'api\CategoryController@store'); // actual route is: api/categories/store
