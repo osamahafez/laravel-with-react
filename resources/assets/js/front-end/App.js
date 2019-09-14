@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Home from './components/Home';
-import Categories from './components/Categories';
+import Categories from './components/Categories/Categories';
 import About from './components/About';
 import Navbar from './components/Navbar';
 
